@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/icons8-eye-24.png-e7af55ef8cb31e2351e7fe27fa2ff855.stex"
+path="res://.import/copyOpaque.png-4ecc1fc9f7fc4f01e1cc48ba351a0376.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://icons8-eye-24.png"
-dest_files=[ "res://.import/icons8-eye-24.png-e7af55ef8cb31e2351e7fe27fa2ff855.stex" ]
+source_file="res://icons/copyOpaque.png"
+dest_files=[ "res://.import/copyOpaque.png-4ecc1fc9f7fc4f01e1cc48ba351a0376.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=false
+flags/filter=true
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2
