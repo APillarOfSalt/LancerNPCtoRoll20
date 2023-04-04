@@ -1,0 +1,332 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://uiHandler.gd" type="Script" id=1]
+[ext_resource path="res://textAssembly.gd" type="Script" id=2]
+[ext_resource path="res://statsTotal.tscn" type="PackedScene" id=3]
+[ext_resource path="res://txt.tscn" type="PackedScene" id=4]
+[ext_resource path="res://dataManager.gd" type="Script" id=5]
+[ext_resource path="res://httpRequest.gd" type="Script" id=6]
+[ext_resource path="res://icon.png" type="Texture" id=7]
+[ext_resource path="res://loadingManager.gd" type="Script" id=8]
+[ext_resource path="res://enabledLCPs.gd" type="Script" id=9]
+[ext_resource path="res://Settings.tscn" type="PackedScene" id=10]
+
+[node name="dataManager" type="MarginContainer"]
+margin_right = 1024.0
+margin_bottom = 600.0
+mouse_filter = 2
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="textAssembly" type="PanelContainer" parent="."]
+margin_right = 1024.0
+margin_bottom = 600.0
+mouse_filter = 2
+script = ExtResource( 2 )
+
+[node name="uiHandler" type="VBoxContainer" parent="textAssembly"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 1017.0
+margin_bottom = 593.0
+custom_constants/separation = 5
+script = ExtResource( 1 )
+
+[node name="h" type="HBoxContainer" parent="textAssembly/uiHandler"]
+margin_right = 1010.0
+margin_bottom = 20.0
+
+[node name="Label" type="Label" parent="textAssembly/uiHandler/h"]
+margin_top = 3.0
+margin_right = 42.0
+margin_bottom = 17.0
+text = " NPC : "
+
+[node name="o" type="OptionButton" parent="textAssembly/uiHandler/h"]
+margin_left = 46.0
+margin_right = 153.0
+margin_bottom = 20.0
+text = "Choose One"
+items = [ "Choose One", null, false, 0, null ]
+selected = 0
+
+[node name="Label2" type="Label" parent="textAssembly/uiHandler/h"]
+margin_left = 157.0
+margin_top = 3.0
+margin_right = 197.0
+margin_bottom = 17.0
+text = " Tier : "
+
+[node name="tier" type="OptionButton" parent="textAssembly/uiHandler/h"]
+margin_left = 201.0
+margin_right = 238.0
+margin_bottom = 20.0
+text = "1"
+items = [ "1", null, false, 0, null, "2", null, false, 1, null, "3", null, false, 2, null ]
+selected = 0
+
+[node name="VSeparator" type="VSeparator" parent="textAssembly/uiHandler/h"]
+margin_left = 242.0
+margin_right = 316.0
+margin_bottom = 20.0
+size_flags_horizontal = 7
+size_flags_vertical = 3
+
+[node name="title" type="Label" parent="textAssembly/uiHandler/h"]
+margin_left = 320.0
+margin_top = 3.0
+margin_right = 613.0
+margin_bottom = 17.0
+size_flags_horizontal = 0
+text = "Roll 20 NPC Ability Copy Paste Generator V1.0"
+
+[node name="VSeparator2" type="VSeparator" parent="textAssembly/uiHandler/h"]
+margin_left = 617.0
+margin_right = 691.0
+margin_bottom = 20.0
+size_flags_horizontal = 7
+size_flags_vertical = 3
+
+[node name="a" type="MenuButton" parent="textAssembly/uiHandler/h"]
+margin_left = 695.0
+margin_right = 791.0
+margin_bottom = 20.0
+text = "Enabled LCPs"
+flat = false
+script = ExtResource( 9 )
+
+[node name="b" type="Button" parent="textAssembly/uiHandler/h"]
+margin_left = 795.0
+margin_right = 864.0
+margin_bottom = 20.0
+size_flags_horizontal = 8
+text = "Load LCP"
+
+[node name="VSeparator3" type="VSeparator" parent="textAssembly/uiHandler/h"]
+margin_left = 868.0
+margin_right = 943.0
+margin_bottom = 20.0
+size_flags_horizontal = 7
+size_flags_vertical = 3
+
+[node name="settings" type="Button" parent="textAssembly/uiHandler/h"]
+margin_left = 947.0
+margin_right = 1010.0
+margin_bottom = 20.0
+text = "Settings"
+
+[node name="HSeparator" type="HSeparator" parent="textAssembly/uiHandler"]
+margin_top = 25.0
+margin_right = 1010.0
+margin_bottom = 29.0
+
+[node name="stats" parent="textAssembly/uiHandler" instance=ExtResource( 3 )]
+margin_top = 34.0
+margin_bottom = 196.0
+
+[node name="HSeparator2" type="HSeparator" parent="textAssembly/uiHandler"]
+margin_top = 201.0
+margin_right = 1010.0
+margin_bottom = 205.0
+
+[node name="r" parent="textAssembly/uiHandler" instance=ExtResource( 4 )]
+visible = false
+margin_top = 190.0
+margin_right = 1010.0
+margin_bottom = 388.0
+
+[node name="h2" type="HBoxContainer" parent="textAssembly/uiHandler"]
+margin_top = 210.0
+margin_right = 1010.0
+margin_bottom = 586.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="s0" type="ScrollContainer" parent="textAssembly/uiHandler/h2"]
+margin_right = 503.0
+margin_bottom = 376.0
+mouse_filter = 1
+size_flags_horizontal = 3
+scroll_horizontal_enabled = false
+
+[node name="v" type="VBoxContainer" parent="textAssembly/uiHandler/h2/s0"]
+margin_right = 503.0
+margin_bottom = 376.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="s1" type="ScrollContainer" parent="textAssembly/uiHandler/h2"]
+margin_left = 507.0
+margin_right = 1010.0
+margin_bottom = 376.0
+mouse_filter = 1
+size_flags_horizontal = 3
+scroll_horizontal_enabled = false
+
+[node name="v" type="VBoxContainer" parent="textAssembly/uiHandler/h2/s1"]
+margin_right = 503.0
+margin_bottom = 376.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ConfirmationDialog" type="ConfirmationDialog" parent="."]
+margin_left = 412.0
+margin_top = 220.0
+margin_right = 612.0
+margin_bottom = 380.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+window_title = "Loading Data"
+resizable = true
+dialog_text = "Woah there space cowfolk, seems y'all don't have data loaded yet. To do so unzip the .lcp file that contains the NPCs. After selecting OK find those unzipped files and load 'em on up."
+dialog_autowrap = true
+
+[node name="AcceptDialog" type="AcceptDialog" parent="."]
+margin_left = 445.0
+margin_top = 271.0
+margin_right = 579.0
+margin_bottom = 329.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+popup_exclusive = true
+window_title = "LCP Selection"
+dialog_autowrap = true
+
+[node name="loader" type="HBoxContainer" parent="."]
+visible = false
+margin_right = 1024.0
+margin_bottom = 600.0
+alignment = 2
+script = ExtResource( 8 )
+
+[node name="fileDialog" type="FileDialog" parent="loader"]
+margin_right = 643.0
+margin_bottom = 600.0
+rect_min_size = Vector2( 300, 200 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+popup_exclusive = true
+window_title = "Open File(s)"
+resizable = true
+mode = 1
+access = 2
+filters = PoolStringArray( "*.json" )
+current_dir = "/Users/Salt/Documents/My Games/Lancer/godotconversion"
+current_file = "npc_classes.json"
+current_path = "/Users/Salt/Documents/My Games/Lancer/godotconversion/npc_classes.json"
+
+[node name="v" type="VBoxContainer" parent="loader"]
+margin_left = 647.0
+margin_right = 1024.0
+margin_bottom = 271.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="p" type="PanelContainer" parent="loader/v"]
+margin_right = 377.0
+margin_bottom = 117.0
+size_flags_vertical = 0
+
+[node name="v" type="VBoxContainer" parent="loader/v/p"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 370.0
+margin_bottom = 110.0
+alignment = 1
+
+[node name="Label" type="Label" parent="loader/v/p/v"]
+margin_right = 363.0
+margin_bottom = 31.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Loading LCP...  choose files as many at a time as you like
+"
+
+[node name="man" type="Label" parent="loader/v/p/v"]
+margin_top = 35.0
+margin_right = 363.0
+margin_bottom = 49.0
+custom_colors/font_color = Color( 1, 0, 0, 1 )
+text = "lcp_manifest.json..."
+
+[node name="cla" type="Label" parent="loader/v/p/v"]
+margin_top = 53.0
+margin_right = 363.0
+margin_bottom = 67.0
+text = "npc_classes.json..."
+
+[node name="fea" type="Label" parent="loader/v/p/v"]
+margin_top = 71.0
+margin_right = 363.0
+margin_bottom = 85.0
+text = "npc_features.json..."
+
+[node name="tem" type="Label" parent="loader/v/p/v"]
+margin_top = 89.0
+margin_right = 363.0
+margin_bottom = 103.0
+text = "npc_templates.json..."
+
+[node name="save" type="Button" parent="loader/v/p"]
+margin_left = 302.0
+margin_top = 90.0
+margin_right = 370.0
+margin_bottom = 110.0
+size_flags_horizontal = 8
+size_flags_vertical = 8
+disabled = true
+text = "Save LCP"
+
+[node name="httpManager" type="PanelContainer" parent="loader/v"]
+margin_left = 88.0
+margin_top = 121.0
+margin_right = 288.0
+margin_bottom = 271.0
+rect_min_size = Vector2( 200, 150 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource( 6 )
+
+[node name="v" type="VBoxContainer" parent="loader/v/httpManager"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 193.0
+margin_bottom = 143.0
+
+[node name="TextureRect" type="TextureRect" parent="loader/v/httpManager/v"]
+margin_right = 186.0
+texture = ExtResource( 7 )
+expand = true
+stretch_mode = 6
+
+[node name="Label" type="Label" parent="loader/v/httpManager/v"]
+margin_top = 4.0
+margin_right = 64.0
+margin_bottom = 35.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Lcp Name
+by author"
+
+[node name="Timer" type="Timer" parent="loader"]
+wait_time = 0.01
+one_shot = true
+
+[node name="settings" parent="." instance=ExtResource( 10 )]
+visible = false
+position = Vector2( 954, 7 )
+
+[connection signal="item_selected" from="textAssembly/uiHandler/h/o" to="textAssembly/uiHandler" method="_on_o_item_selected"]
+[connection signal="item_selected" from="textAssembly/uiHandler/h/tier" to="textAssembly" method="_on_tier_item_selected"]
+[connection signal="pressed" from="textAssembly/uiHandler/h/b" to="loader" method="_on_b_pressed"]
+[connection signal="pressed" from="textAssembly/uiHandler/h/settings" to="." method="_on_settings_pressed"]
+[connection signal="confirmed" from="ConfirmationDialog" to="." method="_on_ConfirmationDialog_confirmed"]
+[connection signal="files_selected" from="loader/fileDialog" to="." method="_on_fdClass_files_selected"]
+[connection signal="files_selected" from="loader/fileDialog" to="loader" method="_on_fdClass_files_selected"]
+[connection signal="popup_hide" from="loader/fileDialog" to="loader" method="_on_fileDialog_popup_hide"]
+[connection signal="pressed" from="loader/v/p/save" to="loader" method="_on_save_pressed"]
+[connection signal="timeout" from="loader/Timer" to="loader" method="_on_Timer_timeout"]
+[connection signal="confirmed" from="settings" to="." method="_on_settings_confirmed"]
+[connection signal="themeChanged" from="settings" to="." method="_on_settings_themeChanged"]

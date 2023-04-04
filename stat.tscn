@@ -1,0 +1,90 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://scrStat.gd" type="Script" id=1]
+[ext_resource path="res://stylebox.tres" type="StyleBox" id=2]
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.25098, 0.262745, 0.266667, 1 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color( 0.466667, 0.466667, 0.466667, 1 )
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0.47451, 0.47451, 0.47451, 0.486275 )
+
+[node name="stat" type="MarginContainer" groups=["stylebox"]]
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 38.0
+margin_bottom = 22.0
+mouse_filter = 2
+size_flags_horizontal = 3
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="items" type="VBoxContainer" parent="."]
+margin_right = 36.0
+margin_bottom = 36.0
+size_flags_horizontal = 3
+custom_constants/separation = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="PanelContainer" parent="items"]
+margin_right = 36.0
+margin_bottom = 18.0
+mouse_filter = 2
+custom_styles/panel = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="items/Panel"]
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 34.0
+margin_bottom = 16.0
+text = " Hull"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel2" type="PanelContainer" parent="items"]
+margin_top = 18.0
+margin_right = 36.0
+margin_bottom = 36.0
+mouse_filter = 2
+custom_styles/panel = SubResource( 2 )
+
+[node name="Label" type="Label" parent="items/Panel2"]
+margin_left = 14.0
+margin_top = 2.0
+margin_right = 22.0
+margin_bottom = 16.0
+size_flags_horizontal = 4
+text = "0"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="Panel" parent="."]
+modulate = Color( 1, 1, 1, 0 )
+margin_right = 36.0
+margin_bottom = 36.0
+mouse_filter = 2
+custom_styles/panel = SubResource( 3 )
+
+[node name="Tween" type="Tween" parent="."]
+
+[node name="Button" type="Button" parent="."]
+modulate = Color( 1, 1, 1, 0 )
+margin_right = 36.0
+margin_bottom = 36.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]
