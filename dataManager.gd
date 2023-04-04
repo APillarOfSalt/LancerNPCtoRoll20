@@ -27,6 +27,7 @@ func _ready() -> void:
 		file.open("user://config.json", File.WRITE)
 		config = {"theme" : "gms"}
 		file.store_line(to_json(config))
+		$ConfirmationDialog.popup()
 	else:
 		file.open("user://config.json", File.READ)
 		config = JSON.parse(file.get_line()).result 
