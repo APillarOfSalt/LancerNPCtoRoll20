@@ -323,7 +323,6 @@ position = Vector2( 954, 7 )
 [connection signal="pressed" from="textAssembly/uiHandler/h/b" to="loader" method="_on_b_pressed"]
 [connection signal="pressed" from="textAssembly/uiHandler/h/settings" to="." method="_on_settings_pressed"]
 [connection signal="confirmed" from="ConfirmationDialog" to="." method="_on_ConfirmationDialog_confirmed"]
-[connection signal="files_selected" from="loader/fileDialog" to="." method="_on_fdClass_files_selected"]
 [connection signal="files_selected" from="loader/fileDialog" to="loader" method="_on_fdClass_files_selected"]
 [connection signal="popup_hide" from="loader/fileDialog" to="loader" method="_on_fileDialog_popup_hide"]
 [connection signal="pressed" from="loader/v/p/save" to="loader" method="_on_save_pressed"]
