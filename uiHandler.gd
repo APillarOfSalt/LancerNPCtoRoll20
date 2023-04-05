@@ -87,7 +87,7 @@ func _on_o_item_selected(index: int) -> void:
 		$stats.changeAll(dict.stats, get_parent().tier)
 		$stats.visible = true
 	else: #if its a template
-		dict = npcTemplates[index-npcClasses.size()]
+		dict = npcTemplates[index-npcClasses.size()+1]
 		$stats.visible = false
 	#populate the text
 	for f in dict.base_features:
