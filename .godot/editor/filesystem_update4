@@ -1,0 +1,13 @@
+res://default_env.tres
+res://main.tscn
+res://CFStylebox.tres
+res://uiHandler.gd
+res://Settings.tscn
+res://loader.tscn
+res://testing.tscn
+res://statsTotal.tscn
+res://txt.tscn
+res://stat.tscn
+res://textAssembly.gd
+res://global.gd
+res://dataManager.gd

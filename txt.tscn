@@ -1,195 +1,161 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=10 format=3 uid="uid://cfnrp61gjpgs7"]
 
-[ext_resource path="res://icons/copy.png" type="Texture" id=1]
-[ext_resource path="res://scrLabels.gd" type="Script" id=2]
-[ext_resource path="res://stylebox.tres" type="StyleBox" id=3]
-[ext_resource path="res://icons/copyOpaque.png" type="Texture" id=4]
-[ext_resource path="res://icons/icons8-eye-24.png" type="Texture" id=5]
-[ext_resource path="res://icons/icons8-hide-24.png" type="Texture" id=6]
+[ext_resource type="Script" path="res://scrLabels.gd" id="2"]
+[ext_resource type="StyleBox" path="res://styleboxes/stylebox.tres" id="2_mynyr"]
+[ext_resource type="Texture2D" uid="uid://d3vnuwm0c606i" path="res://images/copy.png" id="3_fsvay"]
+[ext_resource type="Texture2D" uid="uid://dy2lbe62mjcwi" path="res://images/copyOpaque.png" id="4_l4o30"]
+[ext_resource type="Texture2D" uid="uid://b0y13h08gr07a" path="res://images/icons8-eye-24.png" id="5_5rgoh"]
+[ext_resource type="Texture2D" uid="uid://5ob4ombmg6mm" path="res://images/icons8-hide-24.png" id="6_u5lyk"]
 
-[sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 0.376471, 0.376471, 0.376471, 1 )
+[sub_resource type="StyleBoxFlat" id="1"]
+bg_color = Color(0.376471, 0.376471, 0.376471, 1)
 border_width_left = 3
 border_width_top = 3
 border_width_right = 3
 border_width_bottom = 3
-border_color = Color( 0.615686, 0.615686, 0.615686, 1 )
+border_color = Color(0.615686, 0.615686, 0.615686, 1)
 border_blend = true
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
-[sub_resource type="StyleBoxFlat" id=2]
-bg_color = Color( 0.666667, 0.666667, 0.666667, 0.486275 )
+[sub_resource type="StyleBoxFlat" id="2"]
+bg_color = Color(0.666667, 0.666667, 0.666667, 0.486275)
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
-[sub_resource type="StyleBoxFlat" id=3]
+[sub_resource type="StyleBoxFlat" id="3"]
 draw_center = false
 border_width_left = 2
 border_width_top = 3
 border_width_right = 2
 border_width_bottom = 3
-border_color = Color( 0.658824, 0.658824, 0.658824, 0.87451 )
+border_color = Color(0.658824, 0.658824, 0.658824, 0.87451)
 border_blend = true
 
 [node name="txt" type="MarginContainer" groups=["stylebox"]]
-margin_right = 129.0
-margin_bottom = 20.0
-mouse_filter = 2
+offset_right = 129.0
+offset_bottom = 20.0
 size_flags_horizontal = 3
-script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+mouse_filter = 2
+script = ExtResource("2")
 
 [node name="v" type="VBoxContainer" parent="."]
-margin_right = 129.0
-margin_bottom = 52.0
-custom_constants/separation = 0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+layout_mode = 2
+theme_override_constants/separation = 0
 
 [node name="p" type="PanelContainer" parent="v"]
-margin_right = 129.0
-margin_bottom = 20.0
+layout_mode = 2
 mouse_filter = 2
-custom_styles/panel = ExtResource( 3 )
+theme_override_styles/panel = ExtResource("2_mynyr")
 
 [node name="h" type="HBoxContainer" parent="v/p"]
-margin_left = 2.0
-margin_top = 2.0
-margin_right = 127.0
-margin_bottom = 18.0
+layout_mode = 2
 size_flags_vertical = 0
-custom_constants/separation = 1
+theme_override_constants/separation = 1
 
 [node name="Label" type="Label" parent="v/p/h"]
-margin_top = 1.0
-margin_right = 91.0
-margin_bottom = 15.0
+layout_mode = 2
 text = " Ability Name "
 
-[node name="Button" type="TextureButton" parent="v/p/h"]
-margin_left = 92.0
-margin_right = 108.0
-margin_bottom = 16.0
-mouse_filter = 1
+[node name="MarginContainer" type="MarginContainer" parent="v/p/h"]
+layout_mode = 2
+
+[node name="h" type="HBoxContainer" parent="v/p/h/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="buttonPanel" type="Panel" parent="v/p/h/MarginContainer/h"]
+modulate = Color(1, 1, 1, 0.45098)
+show_behind_parent = true
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
 size_flags_horizontal = 3
-texture_normal = ExtResource( 1 )
-texture_hover = ExtResource( 4 )
-expand = true
-stretch_mode = 4
-
-[node name="Panel" type="Panel" parent="v/p/h/Button"]
-modulate = Color( 1, 1, 1, 0.45098 )
-show_behind_parent = true
-margin_right = 16.0
-margin_bottom = 16.0
-rect_min_size = Vector2( 16, 16 )
 mouse_filter = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
-custom_styles/panel = SubResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+theme_override_styles/panel = SubResource("1")
 
-[node name="showHide" type="TextureButton" parent="v/p/h"]
-margin_left = 109.0
-margin_right = 125.0
-margin_bottom = 16.0
-rect_min_size = Vector2( 16, 16 )
+[node name="visPanel" type="Panel" parent="v/p/h/MarginContainer/h"]
+modulate = Color(1, 1, 1, 0.45098)
+show_behind_parent = true
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("1")
+
+[node name="h2" type="HBoxContainer" parent="v/p/h/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Button" type="TextureButton" parent="v/p/h/MarginContainer/h2"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+texture_normal = ExtResource("3_fsvay")
+texture_hover = ExtResource("4_l4o30")
+stretch_mode = 0
+
+[node name="showHide" type="TextureButton" parent="v/p/h/MarginContainer/h2"]
+layout_mode = 2
 toggle_mode = true
-texture_normal = ExtResource( 5 )
-texture_pressed = ExtResource( 6 )
-expand = true
-stretch_mode = 5
-
-[node name="Panel" type="Panel" parent="v/p/h/showHide"]
-modulate = Color( 1, 1, 1, 0.45098 )
-show_behind_parent = true
-margin_right = 16.0
-margin_bottom = 16.0
-rect_min_size = Vector2( 16, 16 )
-mouse_filter = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
-custom_styles/panel = SubResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+texture_normal = ExtResource("5_5rgoh")
+texture_pressed = ExtResource("6_u5lyk")
+stretch_mode = 0
 
 [node name="flash" type="Panel" parent="v/p"]
-modulate = Color( 1, 1, 1, 0 )
-margin_left = 2.0
-margin_top = 2.0
-margin_right = 127.0
-margin_bottom = 18.0
-mouse_filter = 2
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_styles/panel = SubResource( 2 )
+mouse_filter = 2
+theme_override_styles/panel = SubResource("2")
 
 [node name="m" type="MarginContainer" parent="v"]
-margin_top = 20.0
-margin_right = 129.0
-margin_bottom = 52.0
+layout_mode = 2
 
 [node name="Panel" type="PanelContainer" parent="v/m"]
-margin_right = 129.0
-margin_bottom = 32.0
+layout_mode = 2
 mouse_filter = 2
-custom_styles/panel = SubResource( 3 )
+theme_override_styles/panel = SubResource("3")
 
 [node name="label" type="RichTextLabel" parent="v/m/Panel"]
-margin_left = 2.0
-margin_top = 3.0
-margin_right = 127.0
-margin_bottom = 29.0
+layout_mode = 2
 focus_mode = 2
-fit_content_height = true
+fit_content = true
 selection_enabled = true
 
 [node name="Button" type="TextureButton" parent="v/m"]
-margin_right = 32.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 32, 32 )
-mouse_filter = 1
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
-texture_normal = ExtResource( 1 )
-texture_hover = ExtResource( 4 )
-expand = true
+mouse_filter = 1
+texture_normal = ExtResource("3_fsvay")
+texture_hover = ExtResource("4_l4o30")
+stretch_mode = 5
 
 [node name="Panel" type="Panel" parent="v/m/Button"]
-modulate = Color( 1, 1, 1, 0.45098 )
+modulate = Color(1, 1, 1, 0.45098)
 show_behind_parent = true
-margin_right = 32.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 32, 32 )
-mouse_filter = 2
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 0
+offset_right = 32.0
+offset_bottom = 32.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
-custom_styles/panel = SubResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+mouse_filter = 2
+theme_override_styles/panel = SubResource("1")
 
 [node name="flash" type="Panel" parent="v/m"]
-modulate = Color( 1, 1, 1, 0 )
-margin_right = 129.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 32, 32 )
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
 mouse_filter = 2
-custom_styles/panel = SubResource( 2 )
+theme_override_styles/panel = SubResource("2")
 
-[node name="Tween" type="Tween" parent="."]
-
-[connection signal="pressed" from="v/p/h/Button" to="." method="_on_Named_pressed"]
-[connection signal="toggled" from="v/p/h/showHide" to="." method="_on_showHide_toggled"]
+[connection signal="pressed" from="v/p/h/MarginContainer/h2/Button" to="." method="_on_Named_pressed"]
+[connection signal="toggled" from="v/p/h/MarginContainer/h2/showHide" to="." method="_on_showHide_toggled"]
 [connection signal="pressed" from="v/m/Button" to="." method="_on_Button_pressed"]

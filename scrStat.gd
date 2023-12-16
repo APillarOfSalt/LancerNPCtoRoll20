@@ -2,7 +2,7 @@ extends MarginContainer
 
 
 func swapStyle(style : StyleBox):
-	$items/Panel.add_stylebox_override("panel", style)
+	$items/Panel.add_theme_stylebox_override("panel", style)
 
 
 func _ready() -> void:
@@ -16,6 +16,8 @@ func changeNum(num : String):
 
 
 func _on_Button_pressed() -> void:
-	OS.set_clipboard(n)
-	$Tween.interpolate_property($Panel, "modulate", Color.white, Color.transparent, 1, Tween.TRANS_LINEAR)
-	$Tween.start()
+	$Panel.modulate = Color.WHITE
+	DisplayServer.clipboard_set(n)
+	var tween = create_tween().set_loops(1).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_LINEAR)
+	tween.tween_property($Panel, "modulate", Color.TRANSPARENT, 1)
+	tween.play()

@@ -1,0 +1,119 @@
+[gd_scene load_steps=4 format=3 uid="uid://chsqjbl3esybv"]
+
+[ext_resource type="Script" path="res://loadingManager.gd" id="1"]
+[ext_resource type="Script" path="res://httpRequest.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://cerh6wmefeyh3" path="res://images/icon.png" id="3"]
+
+[node name="loader" type="HBoxContainer"]
+visible = false
+offset_right = 1024.0
+offset_bottom = 600.0
+mouse_filter = 2
+theme_override_constants/separation = 0
+alignment = 2
+script = ExtResource("1")
+
+[node name="fileDialog" type="FileDialog" parent="."]
+mode = 1
+title = "Open File(s)"
+size = Vector2i(335, 159)
+exclusive = false
+unresizable = true
+borderless = true
+always_on_top = true
+ok_button_text = "Open"
+mode_overrides_title = false
+file_mode = 1
+access = 2
+filters = PackedStringArray("*.json")
+
+[node name="v" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+mouse_filter = 2
+
+[node name="MagicNumber" type="MarginContainer" parent="v"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="p" type="PanelContainer" parent="v"]
+layout_mode = 2
+size_flags_vertical = 0
+mouse_filter = 2
+
+[node name="v" type="VBoxContainer" parent="v/p"]
+layout_mode = 2
+mouse_filter = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="v/p/v"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Loading LCP...  choose files as many at a time as you like
+"
+
+[node name="man" type="Label" parent="v/p/v"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+text = "lcp_manifest.json..."
+
+[node name="cla" type="Label" parent="v/p/v"]
+layout_mode = 2
+text = "npc_classes.json..."
+
+[node name="fea" type="Label" parent="v/p/v"]
+layout_mode = 2
+text = "npc_features.json..."
+
+[node name="tem" type="Label" parent="v/p/v"]
+layout_mode = 2
+text = "npc_templates.json..."
+
+[node name="save" type="Button" parent="v/p"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+disabled = true
+text = "Save LCP"
+
+[node name="httpManager" type="PanelContainer" parent="v"]
+custom_minimum_size = Vector2(200, 150)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("2")
+
+[node name="v" type="VBoxContainer" parent="v/httpManager"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="v/httpManager/v"]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("3")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Label" type="Label" parent="v/httpManager/v"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Lcp Name
+by author"
+
+[node name="MagicNumber2" type="MarginContainer" parent="."]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 2
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.01
+one_shot = true
+
+[connection signal="canceled" from="fileDialog" to="." method="_on_file_dialog_canceled"]
+[connection signal="files_selected" from="fileDialog" to="." method="_on_fdClass_files_selected"]
+[connection signal="visibility_changed" from="fileDialog" to="." method="_on_file_dialog_visibility_changed"]
+[connection signal="pressed" from="v/p/save" to="." method="_on_save_pressed"]
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

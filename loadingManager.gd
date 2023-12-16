@@ -4,10 +4,12 @@ extends HBoxContainer
 func popup():
 	pathArr = ["","","",""]
 	greenLabels([false,false,false,false])
-	visible = true
+	self.show()
 	$fileDialog.popup()
+	timerBool = false #timer is signaling that the file dialog is being shown
+	$Timer.start()
 
-func hide():
+func hideMe():
 	visible = false
 	$fileDialog.hide()
 
@@ -20,7 +22,7 @@ func _ready():
 
 
 var pathArr = ["","","",""]
-func _on_fdClass_files_selected(paths: PoolStringArray) -> void:
+func _on_fdClass_files_selected(paths: PackedStringArray) -> void:
 #	check file name to see if it matches
 	for s in paths:
 		match s.get_file():
@@ -42,6 +44,7 @@ func _on_fdClass_files_selected(paths: PoolStringArray) -> void:
 		if !bol:
 			falseToggle = false
 	if !falseToggle:
+		timerBool = true #timer is being used to pop the file dialog back up
 		$Timer.start()
 	
 	if arr == [true, true, true, false] or [true, true, true, true]:
@@ -52,50 +55,64 @@ func _on_fdClass_files_selected(paths: PoolStringArray) -> void:
 
 func greenLabels(data : Array):
 	if data[0]:
-		$v/p/v/man.set("custom_colors/font_color", Color.green)
+		$v/p/v/man.set("theme_override_colors/font_color", Color.GREEN)
 	else:
-		$v/p/v/man.set("custom_colors/font_color", Color.red)
+		$v/p/v/man.set("theme_override_colors/font_color", Color.RED)
 	if data[1]:
-		$v/p/v/cla.set("custom_colors/font_color", Color.green)
+		$v/p/v/cla.set("theme_override_colors/font_color", Color.GREEN)
 	else:
-		$v/p/v/cla.set("custom_colors/font_color", Color.red)
+		$v/p/v/cla.set("theme_override_colors/font_color", Color.RED)
 	if data[2]:
-		$v/p/v/fea.set("custom_colors/font_color", Color.green)
+		$v/p/v/fea.set("theme_override_colors/font_color", Color.GREEN)
 	else:
-		$v/p/v/fea.set("custom_colors/font_color", Color.red)
+		$v/p/v/fea.set("theme_override_colors/font_color", Color.RED)
 	if data[3]:
-		$v/p/v/tem.set("custom_colors/font_color", Color.green)
+		$v/p/v/tem.set("theme_override_colors/font_color", Color.GREEN)
 	else:
-		$v/p/v/tem.set("custom_colors/font_color", Color.red)
+		$v/p/v/tem.set("theme_override_colors/font_color", Color.RED)
 
 
 
 func _on_save_pressed() -> void:
-	var f = File.new()
-	f.open(pathArr[0], File.READ)
+	var f = FileAccess.open(pathArr[0], FileAccess.READ)
 	var s = f.get_as_text()
-	var data = JSON.parse(s).result
+	var data = JSON.parse_string(s)
 	f.close()
 	
-	var d = Directory.new()
-	d.open("user://savedLCPs")
+	var d = DirAccess.open("user://savedLCPs")
+	d.list_dir_begin()
 	if !d.dir_exists(data.name):
 		d.make_dir(data.name)
-		d.change_dir("user://savedLCPs/")
+		#d.change_dir("user://savedLCPs/" + data.name)
 		for p in pathArr:
 			if p != "":
-				d.copy(p ,OS.get_user_data_dir() + "/savedLCPs/" + data.name + "/" + p.get_file())
-	get_parent().loadAllLCPs()
-	hide()
+				d.copy(p ,"user://savedLCPs/" + data.name + "/" + p.get_file())
+	d.list_dir_end()
+	Glo.loadAllLCPs(true)
+	hideMe()
 
 func _on_b_pressed() -> void:
-	popup()
+	if visible:
+		hideMe()
+	else:
+		popup()
 
-
+#the timer ending signals: false: fileDialog popped up,  true: re-popup file dialog
+var timerBool : bool = false
 func _on_Timer_timeout() -> void:
-	$fileDialog.show()
-	show()
+	if timerBool:
+		$fileDialog.show()
+		show()
+	else:
+		resizePopup()
 
+func resizePopup():
+	var xy : Vector2i = Vector2i($MagicNumber2.size.x, $v/MagicNumber.size.y)
+	var margins : Vector2i = Vector2i(xy.x, xy.x*2)
+	var xx : int = $v.position.x - $fileDialog.position.x
+	var yy : int = DisplayServer.window_get_size().y
+	$fileDialog.position = xy
+	$fileDialog.size = Vector2i(xx,yy) -margins -$fileDialog.position
 
-func _on_fileDialog_popup_hide() -> void:
-	hide()
+func _on_file_dialog_canceled():
+	hideMe()

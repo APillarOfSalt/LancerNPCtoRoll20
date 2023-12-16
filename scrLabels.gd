@@ -5,7 +5,7 @@ func _ready() -> void:
 
 
 func swapStyle(style : StyleBox):
-	$v/p.add_stylebox_override("panel", style)
+	$v/p.add_theme_stylebox_override("panel", style)
 
 var t : String
 var nm : String
@@ -24,16 +24,22 @@ func changeText(txt : String):
 	$v/m/Panel/label.text = txt
 
 func _on_Button_pressed() -> void:
-	OS.set_clipboard(t)
-	$Tween.interpolate_property($v/m/flash, "modulate", Color.white, Color.transparent, 1, Tween.TRANS_LINEAR)
-	$Tween.start()
-
+	$v/m/flash.modulate = Color.WHITE
+	DisplayServer.clipboard_set(t)
+	var tween = create_tween().set_loops(1)
+	tween.set_trans(Tween.TRANS_LINEAR)
+	tween.set_ease(Tween.EASE_IN)
+	tween.tween_property($v/m/flash, "modulate", Color.TRANSPARENT, 1.0)
+	tween.play()
 
 func _on_Named_pressed() -> void:
-	OS.set_clipboard(nm)
-	$Tween.interpolate_property($v/p/flash, "modulate", Color.white, Color.transparent, 1, Tween.TRANS_LINEAR)
-	$Tween.start()
-
+	$v/p/flash.modulate = Color.WHITE
+	DisplayServer.clipboard_set(nm)
+	var tween = create_tween().set_loops(1)
+	tween.set_trans(Tween.TRANS_LINEAR)
+	tween.set_ease(Tween.EASE_IN)
+	tween.tween_property($v/p/flash, "modulate", Color.TRANSPARENT, 1.0)
+	tween.play()
 
 func _on_showHide_toggled(button_pressed: bool) -> void:
 	$v/m.visible = !button_pressed

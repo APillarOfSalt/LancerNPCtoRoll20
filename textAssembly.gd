@@ -1,139 +1,179 @@
 extends PanelContainer
 
-
-var tagsData
-var condData
-var tLoc : String = "res://roll20Macros/"
-
-func _ready() -> void:
-	var d = Directory.new()
-	var f = File.new()
-	#load roll20 macros
-	d.open(tLoc)
-	d.list_dir_begin(true, true)
-	while true:
-		var path = d.get_next()
-		if path.get_extension() == "":
-			break
-		f.open(tLoc + path, File.READ)
-		var data = f.get_as_text()
-		match path:
-			"conditions.txt":
-				condData = data.split("{", true)
-			"tags.json":
-				tagsData = JSON.parse(data).result
-		f.close()
-	d.list_dir_end()
-
-
-
-
-var ACCDIFF : Array = [
-	"", 			 #0
-	"|ACC6, 6d6kh1", #1
-	"|ACC5, 5d6kh1", #2
-	"|ACC4, 4d6kh1", #3
-	"|ACC3, 3d6kh1", #4
-	"|ACC2, 2d6kh1", #5
-	"|ACC1, 1d6",	 #6
-	"|---, 0",		 #7
-	"|DIFF1, -1d6",
-	"|DIFF2, -2d6kh1",
-	"|DIFF3, -3d6kh1",
-	"|DIFF4, -4d6kh1",
-	"|DIFF5, -5d6kh1",
-	"|DIFF6, -6d6kh1", #13
-]
+@onready var txtRes : Resource = load("res://textResource.gd").new()
 
 func _on_tier_item_selected(index: int) -> void:
+	if index == -1:
+		tier = max(tier,1)
 	tier = index
-	$uiHandler._on_o_item_selected($uiHandler.currentClass)
+	if $uiHandler.currentClass >= 0:
+		$uiHandler._on_o_item_selected($uiHandler.currentClass)
+
+func _on_o_item_selected(index):
+	_on_tier_item_selected(-1)
 
 var tier : int = 0 #0=1,1=2,2=3
-func weaponPasta(dict : Dictionary) -> String:
-	var output : String = "&{template:default} {{TARGETING=@{target|Target1|name}}} {{name="
+
+func tagAssembler(tags : Array, tie : int = -1) -> String:
+	if tags.size():
+		var output = " {{TAGS="
+		for t in tags:
+			var num : int = -1
+			if t.has("val"):
+				if t.val is int or t.val is float:
+					num = int(t.val)
+				elif t.val is String:
+					num = t.val.substr(1 + (tie*2), 1) #1+(0*2)=1, 1+(1*2)=3, 1+(2*2)=5
+				else:
+					print(t.val.typeof())
+			var a = txtRes.getTag(t.id, num)
+			output += a + ", "
+		output = output.left(output.length()-2)
+		output += "}}"
+		return output
+	return ""
+
+func accDiffStr(num : int = 0) -> String:
+	var ACCDIFF : Array = [
+		"", 			 #0
+		"|ACC6, 6d6kh1", #1
+		"|ACC5, 5d6kh1", #2
+		"|ACC4, 4d6kh1", #3
+		"|ACC3, 3d6kh1", #4
+		"|ACC2, 2d6kh1", #5
+		"|ACC1, 1d6",	 #6
+		"|---, 0",		 #7
+		"|DIFF1, -1d6",
+		"|DIFF2, -2d6kh1",
+		"|DIFF3, -3d6kh1",
+		"|DIFF4, -4d6kh1",
+		"|DIFF5, -5d6kh1",
+		"|DIFF6, -6d6kh1", #13
+	]
+	
+	var dup = ACCDIFF.duplicate(1)
+	var y = -num+7 #mx+b
+	dup[0] = dup[y]
+	dup[y] = ""
+	var output : String = ""
+	for i in dup:
+		output+=i
+	return output
+
+
+func rangeStr(r : Array = []) -> String:
+	if r.size():
+		var output : String = ""
+		for range in r:
+			output += "{{" + range.type + "=[[" + str(range.val) + "]]}}"
+		return output
+	return ""
+
+func dmgStr(dmg : Array = []) -> String:
+	if dmg.size():
+		var output = "{{DMG="
+		for d in dmg:
+			output += "[[" + str(d.damage[tier]) + "]] " + d.type + " "
+		output = output.left(output.length()-1)
+		return output + "}}"
+	return ""
+
+
+
+var currentSensors : int = -1
+func setSensors(sense : int = -1):
+	currentSensors = sense
+
+# Dictionary Structure for NPC weapons
+# dict.name : String
+# dict.weapon_type : String
+# dict.attack_bonus : Array [#,#,#]
+# dict.accuracy : Array [#,#,#]
+# dict.tags : Array [{ 
+#		"id" : String,
+#		"val" : int (optional)
+#	},
+#]
+# dict.type : String
+# dict.damage : Array [{
+#		"type" : String,
+#		"damage" : Array [#,#,#]
+#	},
+#]
+# dict.effect : String
+# dict.range : Array [{
+#		"type" : String,
+#		"val" : int
+#	},
+#]
+# dict.on_hit : String
+
+func npcWeaponPasta(dict : Dictionary) -> String:
+	#eflip false:Evasion, true:E-Def
+	var atkRollStr = func atkRollStr(atkBonus : int, acc : int, eFlip : bool) -> String:
+		var output : String = "{{TARGETING=@{target|Target1|name}}} {{ATK=[[ [[d20]] +"
+		output += str(atkBonus)
+		output += "+ ?{ACC/DIFF"
+		output += accDiffStr(acc)
+		output += "}]]** v **[[@{target|Target1|autocalc_"
+		var s = "evasion}]] Evade }}"
+		if eFlip:
+			s = "edef}]] E-Defense }}"
+		output += s
+		return output
+	
+	dict.name = Glo.firstLetterCapRestLower(dict.name)
+	#template and name
+	var output : String = "&{template:default} {{name="
 	output += dict.name
 	if dict.has("weapon_type"):
 		output += " (" + dict.weapon_type + ")"
-	output += "}} {{ATK=[[ [[d20]] +" +str( dict.attack_bonus[tier] ) + "+ ?{ACC/DIFF"
-	
-	var dup = ACCDIFF.duplicate(1)
-	var y = 7
-	if dict.has("accuracy"):
-		y = -dict.accuracy[tier]+7 #mx+b
-	dup[0] = dup[y]
-	dup[y] = ""
-	for i in dup:
-		output+=i
-	output += "}]]** v **[[@{target|Target1|autocalc_"
-	var s = "evasion}]] Evade"
-	for t in dict.tags:
-		if t.id == "tg_smart":
-			s = "edef}]] E-Defense"
-	if dict.type == "Tech":
-		s = "edef}]] E-Defense"
-	output += s + " }}"
-	
-	if dict.has("damage"):
-		output += "{{DMG="
-		for d in dict.damage:
-			output += "[[" + str(d.damage[tier]) + "]] " + d.type + " "
-		output = output.left(output.length()-1)
-		output += "}}"
-	
-	if dict.effect != "":
-		output += " {{EFFECT=" + dict.effect + "}}"
-	
-	if dict.has("range"):
-		for r in dict.range:
-			output += " {{" + r.type + "=[[" + str(r.val) + "]]}}"
-	else: 
-		output += " {{SENSORS=[[@{npc_sensor}]]}}"
-	
-	if dict.tags.size():
-		output += " {{TAGS="
+	output += "}}"
+	#attack roll if included
+	if dict.has("type") and dict.has("attack_bonus"):
+		var eDefFlip : bool = (dict.type == "Tech") #false=Evasion, true=E-Defense
 		for t in dict.tags:
-			var a = tagsData[t.id] + ", "
-			if t.has("val"):
-				var amount = t.val
-				if t.val is String: #reliable values are {int/int/int} based off of tier 0{,1int,2/,3int,4/,5int,6}
-					amount = t.val.substr(1 + (tier*2), 1) #1+(0*2)=1, 1+(1*2)=3, 1+(2*2)=5
-				a = a.replace("X",amount)
-			output += a
-		output = output.left(output.length()-2)
-		output += "}}"
-	
-	if dict.has("on_hit") and dict.on_hit != "":
-		output += " {{ON HIT=" + dict.on_hit + "}}"
-	
+			if t.id == "tg_smart":
+				eDefFlip = true
+		var acc : int = 0
+		if dict.has("accuracy"):
+			acc = dict.accuracy[tier]
+		output += atkRollStr.call(dict.attack_bonus[tier], acc, eDefFlip)
+	#range or sensors range if included
+	if dict.has("range"):
+		output += rangeStr(dict.range)
+	elif currentSensors > 0:
+		output += "{{SENSORS=[["+ str(currentSensors) +"]]}}"
+	#damage if included
+	if dict.has("damage"):
+		output += dmgStr(dict.damage)
+	#effect if included
+	if dict.has("effect"):
+		if dict.effect != "":
+			var _str : String = txtRes.parseText(dict.effect, tier)
+			output += " {{EFFECT=" + _str + "}}"
+	#on hit effect if included
+	if dict.has("on_hit"):
+		if dict.on_hit != "":
+			var _str : String = txtRes.parseText(dict.on_hit, tier)
+			output += " {{ON HIT=" + _str + "}}"
+	#tags if included
+	if dict.has("tags") and dict.has("tier"):
+		output += tagAssembler(dict.tags, tier)
 	return output
 
 func systemPasta(dict : Dictionary):
-	var n = dict.name.left(1)
-	n += dict.name.right(1).to_lower()
+	dict.name = Glo.firstLetterCapRestLower(dict.name)
 	var tg = ""
-	if dict.tags.size():
-		tg = " {{TAGS="
-		for t in dict.tags:
-			var a = tagsData[t.id] + ", "
-			if t.has("val"):
-				a = a.replace("X",t.val)
-			tg += a
-		tg = tg.left(tg.length()-2)
-		tg += "}}"
-	return "&{template:default} {{name="+n+"}} {{EFFECT="+dict.effect+"}}" + tg
+	if dict.has("tags"):
+		tg = tagAssembler(dict.tags, tier)
+	var _str : String = txtRes.parseText(dict.effect, tier)
+	return "&{template:default} {{name="+dict.name+"}} {{EFFECT="+_str+"}}" + tg
 
 func reactionPasta(dict : Dictionary) -> String:
-	var n = dict.name.left(1)
-	n += dict.name.right(1).to_lower()
+	dict.name = Glo.firstLetterCapRestLower(dict.name)
 	var tg = ""
-	if dict.tags.size():
-		tg = " {{TAGS="
-		for t in dict.tags:
-			var a = tagsData[t.id] + ", "
-			if t.has("val"):
-				a = a.replace("X",t.val)
-			tg += a
-		tg = tg.left(tg.length()-2)
-		tg += "}}"
-	return "&{template:default} {{name="+n+"}} {{TRIGGER="+dict.trigger+"}} {{EFFECT="+dict.effect+"}}" + tg
+	if dict.has("tags"):
+		tg = tagAssembler(dict.tags, tier)
+	var _str : String = txtRes.parseText(dict.effect, tier)
+	return "&{template:default} {{name="+dict.name+"}} {{TRIGGER="+dict.trigger+"}} {{EFFECT="+_str+"}}" + tg
